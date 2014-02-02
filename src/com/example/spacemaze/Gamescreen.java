@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 
-
 public class Gamescreen extends Activity {
 	private GLSurfaceView view;
 	
@@ -24,7 +23,7 @@ public class Gamescreen extends Activity {
         if(supportsEs2)
         {
         	view.setEGLContextClientVersion(2);
-        	view.setRenderer(new GameRenderer());
+        	view.setRenderer(new GameRenderer(getApplicationContext()));
         }
         else
         {

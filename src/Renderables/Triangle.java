@@ -5,7 +5,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import android.opengl.GLES20;
-import android.opengl.Matrix;
 import android.os.SystemClock;
 
 import engine.RenderItem;
@@ -49,7 +48,7 @@ public class Triangle extends RenderItem {
 	public void processLogic() {
 		long time = SystemClock.uptimeMillis() % 10000L;
         float angle = (360.0f / 10000.0f) * ((int) time);
-    	this.setPitch(angle);
+    	this.setYaw(angle);
         
 	}
 

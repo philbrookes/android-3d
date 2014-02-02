@@ -1,13 +1,20 @@
 package com.example.spacemaze;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import Renderables.Triangle;
+import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 
 import engine.Camera;
 import engine.Engine;
+import engine.ObjParser;
+import engine.Parser;
 import engine.Scene;
 
 /**
@@ -18,9 +25,10 @@ public class GameRenderer implements Renderer
 {
 	private Engine engine;
 	private Scene scene;
-
-	public GameRenderer()
+	private Context context;
+	public GameRenderer(Context context)
 	{
+		this.context = context;
 		engine = new Engine();
 		scene = new Scene();
 		
@@ -69,6 +77,13 @@ public class GameRenderer implements Renderer
 		tri = new Triangle();
 		tri.setPosition(1, 0, 0);
 		scene.addItem(tri);
+		
+		Parser blob = new ObjParser(context);
+		try{
+			blob.parse(R.raw.blob_obj);
+		}catch(Exception e){
+			Log.d("spacemaze", e.getMessage());
+		}
 	}	
 	
 	@Override
