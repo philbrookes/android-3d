@@ -15,6 +15,7 @@ abstract public class RenderItem {
 	}
 	
 	abstract public void processLogic();
+	abstract public int getNumVertices();
 	
 	public void render(Renderer renderer, float[] matrix){
 		float[] pos = this.getPosition();

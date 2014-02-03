@@ -5,7 +5,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import android.opengl.GLES20;
-import android.opengl.Matrix;
 import android.os.SystemClock;
 
 import engine.RenderItem;
@@ -49,8 +48,8 @@ public class Triangle extends RenderItem {
 	public void processLogic() {
 		long time = SystemClock.uptimeMillis() % 10000L;
         float angle = (360.0f / 10000.0f) * ((int) time);
-    	this.setPitch(angle);
-        
+    	this.setYaw(angle);
+    	this.setRoll(angle*2);
 	}
 
 	@Override
@@ -65,6 +64,12 @@ public class Triangle extends RenderItem {
 		colorsBuffer.position(0);
 		GLES20.glVertexAttribPointer(renderer.getEngine().getColorHandle(), 4, GLES20.GL_FLOAT, false, 0, colorsBuffer);
 		GLES20.glEnableVertexAttribArray(renderer.getEngine().getColorHandle());
+	}
+
+	@Override
+	public int getNumVertices() {
+		// TODO Auto-generated method stub
+		return this.vertices.length / 3;
 	}
 
 }
