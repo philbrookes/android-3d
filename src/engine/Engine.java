@@ -55,7 +55,6 @@ public class Engine {
 
 	private int colorHandle;
 	private int normalHandle;
-	private int lightHandle;
 
 	private Renderer renderer; 
     
