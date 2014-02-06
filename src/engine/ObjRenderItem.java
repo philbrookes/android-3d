@@ -12,13 +12,14 @@ import android.util.Log;
 
 public class ObjRenderItem extends RenderItem {
 
-	private HashMap<String, FloatBuffer> verticesBuffer, colorsBuffer;
+	private HashMap<String, FloatBuffer> verticesBuffer, colorsBuffer, normalsBuffer;
 	private ObjParser parsedObject;
 	
 	public ObjRenderItem(ObjParser parsedObject) {
 		super();
 		this.verticesBuffer = new HashMap<String, FloatBuffer>();
 		this.colorsBuffer = new HashMap<String, FloatBuffer>();
+		this.normalsBuffer = new HashMap<String, FloatBuffer>();
 		this.parsedObject = parsedObject;
 		
 		ArrayList<String> objIds = parsedObject.getObjectIds();
@@ -41,6 +42,14 @@ public class ObjRenderItem extends RenderItem {
 			colBuffer.put(colors).position(0);
 			
 			colorsBuffer.put(objId, colBuffer);
+			
+			float[] norms = parsedObject.getObjectNormals(objId);
+			FloatBuffer normBuffer;
+			normBuffer = ByteBuffer.allocateDirect(norms.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+			normBuffer.put(norms).position(0);
+			
+			normalsBuffer.put(objId, normBuffer);
+		
 		}
 	}
 	
@@ -79,6 +88,11 @@ public class ObjRenderItem extends RenderItem {
 			colBuffer.position(0);
 			GLES20.glVertexAttribPointer(renderer.getEngine().getColorHandle(), 3, GLES20.GL_FLOAT, false, 0, colBuffer);
 			GLES20.glEnableVertexAttribArray(renderer.getEngine().getColorHandle());
+			
+			FloatBuffer norBuffer = normalsBuffer.get(objId);
+			norBuffer.position(0);
+			GLES20.glVertexAttribPointer(renderer.getEngine().getNormalHandle(), 3, GLES20.GL_FLOAT, false, 0, norBuffer);
+			GLES20.glEnableVertexAttribArray(renderer.getEngine().getNormalHandle());
 		}
 	}
 	

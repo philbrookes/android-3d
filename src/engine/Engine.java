@@ -54,6 +54,7 @@ public class Engine {
 	private float[] mVPMatrix = new float[16];
 
 	private int colorHandle;
+	private int normalHandle;
 
 	private Renderer renderer; 
     
@@ -114,6 +115,10 @@ public class Engine {
     
     public int getColorHandle() {
 		return colorHandle;
+	}
+    
+    public int getNormalHandle() {
+		return normalHandle;
 	}
     
     public void processLogic(Scene scene) {
@@ -201,6 +206,7 @@ public class Engine {
 			// Bind attributes
 			GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
 			GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
+			GLES20.glBindAttribLocation(programHandle, 2, "a_Normal");
 			
 			// Link the two shaders together into a program.
 			GLES20.glLinkProgram(programHandle);
@@ -223,9 +229,10 @@ public class Engine {
 		}
         
         // Set program handles. These will later be used to pass in values to the program.
-        mVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");        
+        mVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");        
+        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+        normalHandle = GLES20.glGetAttribLocation(programHandle, "a_Normal");
         
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);      

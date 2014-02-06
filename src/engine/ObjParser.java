@@ -73,7 +73,7 @@ public class ObjParser extends Parser {
 			} catch(NumberFormatException e) {
 				np = 0;
 			}
-			//this.addTexture(this.normalPoints.get(np));
+			this.addNormal(this.normalPoints.get(np));
 		case 2:
 			int tp = 0;
 			try{
