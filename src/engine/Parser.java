@@ -81,11 +81,12 @@ public abstract class Parser {
 		return retArray;
 	}
 	public float[] getObjectNormals(String objId) {
-		Float[] norms = (Float[]) this.normals.get(objId).toArray();
-		float[] retArray = new float[norms.length];
+		ArrayList<Float> norms = this.normals.get(objId);
+		
+		float[] retArray = new float[norms.size()];
 		int i = 0;
 		for(Float f : norms) {
-			retArray[i++] = (f != null ? f : 0);
+			retArray[i++] = (f != null ? f.floatValue() : 0);
 		}
 		return retArray;
 	}
