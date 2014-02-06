@@ -66,6 +66,22 @@ public class ObjParser extends Parser {
 	private void processFaceChunk(String chunk) {
 		String[] bits = chunk.split("/");
 		switch(bits.length) {
+		case 3:
+			int np = 0;
+			try{
+				np = Integer.parseInt(bits[2]) - 1;
+			} catch(NumberFormatException e) {
+				np = 0;
+			}
+			//this.addTexture(this.normalPoints.get(np));
+		case 2:
+			int tp = 0;
+			try{
+				tp = Integer.parseInt(bits[1]) - 1;
+			} catch(NumberFormatException e) {
+				tp = 0;
+			}
+			//this.addTexture(this.texturePoints.get(tp));
 		case 1:
 			int vp = 0;
 			try{
@@ -74,22 +90,6 @@ public class ObjParser extends Parser {
 				vp = 0;
 			}
 			this.addVertice(this.verticePoints.get(vp));
-		case 2:
-			int tp;
-			try{
-				tp = Integer.parseInt(bits[0]) - 1;
-			} catch(NumberFormatException e) {
-				tp = 0;
-			}
-			//this.addTexture(this.texturePoints.get(tp));
-		case 3:
-			int np;
-			try{
-				np = Integer.parseInt(bits[0]) - 1;
-			} catch(NumberFormatException e) {
-				np = 0;
-			}
-			//this.addTexture(this.normalPoints.get(np));
 		}
 	}
 }

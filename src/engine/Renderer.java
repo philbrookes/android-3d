@@ -30,7 +30,7 @@ public class Renderer {
 	
 	public void renderScene(Scene scene) {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-		GLES20.glFrontFace(GLES20.GL_CCW);
+		GLES20.glFrontFace(GLES20.GL_CW);
 		GLES20.glCullFace(GLES20.GL_BACK);
 		GLES20.glEnable(GLES20.GL_CULL_FACE);
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
