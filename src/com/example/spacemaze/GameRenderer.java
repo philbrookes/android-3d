@@ -5,10 +5,8 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import Renderables.Triangle;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
-import android.util.Log;
 
 import engine.Camera;
 import engine.Engine;
@@ -25,37 +23,42 @@ public class GameRenderer implements Renderer {
 	private Engine engine;
 	private Scene scene;
 	private Context context;
-
+	
 	public GameRenderer(Context context) {
 		this.context = context;
-		engine = new Engine();
+		engine = new Engine(context);
 		scene = new Scene();
-
+		
 		engine.setShaderVS(
-			"uniform mat4 u_MVPMatrix;        \n"
-			+ "uniform mat4 u_MVMatrix;       \n"
+			"uniform mat4 u_MVPMatrix;                                               \n"
+			+ "uniform mat4 u_MVMatrix;                                              \n"
 			
-			+ "attribute vec4 a_Position;     \n"
-			+ "attribute vec4 a_Color;        \n"
-			+ "attribute vec3 a_Normal;		  \n"
+			+ "attribute vec4 a_Position;                                            \n"
+			+ "attribute vec4 a_Color;                                               \n"
+			+ "attribute vec3 a_Normal;		                                         \n"
+			+ "attribute vec2 a_TexCoord;                                            \n"
 			
-			+ "varying vec4 v_Color;          \n"
+			+ "varying vec2 v_TexCoord;                                              \n"
+			+ "varying vec4 v_Color;                                                 \n"
 
-			+ "void main()                    \n"
-			+ "{                              \n"
+			+ "void main()                                                           \n"
+			+ "{                                                                     \n"
 			+ "   vec3 modelViewNormal = vec3(u_MVMatrix * vec4(a_Normal, 0.0));     \n"
 			+ "   v_Color = a_Color;                                                 \n"
 			+ "   gl_Position = u_MVPMatrix * a_Position;                            \n"
+			+ "   v_TexCoord = a_TexCoord;   										 \n"
 			+ "}                                                                     \n"
 		);
 
 		engine.setShaderFS(
-			"precision mediump float;         \n"
-			+ "varying vec4 v_Color;          \n"
-			+ "void main()                    \n"
-			+ "{                              \n"
-			+ "   gl_FragColor = v_Color;     \n"
-			+ "}                              \n"
+			"precision mediump float;                                                \n"
+			+ "varying vec4 v_Color;                                                 \n"
+			+ "uniform sampler2D u_Texture;                                          \n"
+			+ "varying vec2 v_TexCoord;                                              \n"
+			+ "void main()                                                           \n"
+			+ "{                                                                     \n"
+			+ "   gl_FragColor = (v_Color * texture2D(u_Texture, v_TexCoord));       \n"
+			+ "}                                                                     \n"
 		);
 	}
 

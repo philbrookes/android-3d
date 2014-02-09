@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ObjParser extends Parser {
 
@@ -36,7 +35,6 @@ public class ObjParser extends Parser {
 	    				Float.parseFloat(chunks[2]),
 	    				Float.parseFloat(chunks[3])
 					};
-		    		Log.d("android-3d", this.verticePoints.size() + " set to: " + String.valueOf(vPoint[0]) + ", " + String.valueOf(vPoint[1]) + ", " + String.valueOf(vPoint[2]));
 		    		this.verticePoints.add(vPoint);
 		    	} else if (cmd.equals("vn")) {
 		    		Float[] nPoint = {
@@ -48,15 +46,22 @@ public class ObjParser extends Parser {
 		    	} else if (cmd.equals("vt")) {
 		    		Float[] tPoint = {
 	    				Float.parseFloat(chunks[1]),
-	    				Float.parseFloat(chunks[2]),
-	    				Float.parseFloat(chunks[3])
+	    				Float.parseFloat(chunks[2])
 					};
 		    		this.texturePoints.add(tPoint);
 		    	} else if (cmd.equals("f")) {
 		    		for(int i = 1; i < chunks.length; i++) {
 		    			this.processFaceChunk(chunks[i]);
 		    		}
+		    	} else if(cmd.equals("usemtl")) {
+		    		String file = chunks[1];
+		    		//sometimes file names lead with a _ for no good reason, trim it
+		    		if(file.startsWith("_"))
+		    		{
+		    			file = file.substring(1);
+		    		}
 		    		
+		    		this.addTexturefile(file);
 		    	} else {
 		    		continue;
 		    	}
@@ -81,7 +86,7 @@ public class ObjParser extends Parser {
 			} catch(NumberFormatException e) {
 				tp = 0;
 			}
-			//this.addTexture(this.texturePoints.get(tp));
+			this.addTexture(this.texturePoints.get(tp));
 		case 1:
 			int vp = 0;
 			try{

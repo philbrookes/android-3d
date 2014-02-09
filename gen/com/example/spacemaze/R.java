@@ -23,7 +23,6 @@ public final class R {
     public static final class drawable {
         public static final int cube=0x7f020000;
         public static final int ic_launcher=0x7f020001;
-        public static final int render=0x7f020002;
     }
     public static final class id {
         public static final int action_settings=0x7f090000;
@@ -35,8 +34,9 @@ public final class R {
         public static final int gamescreen=0x7f080000;
     }
     public static final class raw {
-        public static final int blob_mtl=0x7f040000;
-        public static final int blob_obj=0x7f040001;
+        public static final int blob_obj=0x7f040000;
+        public static final int blob_skin=0x7f040001;
+        public static final int brick_texture=0x7f040002;
     }
     public static final class string {
         public static final int action_settings=0x7f060002;

@@ -1,6 +1,11 @@
 package engine;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
+import android.util.Log;
 
 public class Engine {
 	private String shaderFS = 
@@ -48,6 +53,10 @@ public class Engine {
 
 	private int positionHandle;
 	
+	private int TextureUniformHandle;
+	 
+	private int TextureCoordinateHandle;
+	
 	private float[] projectionMatrix = new float[16];
 	private float[] modelMatrix = new float[16];
 	private float[] viewMatrix = new float[16];
@@ -58,7 +67,10 @@ public class Engine {
 
 	private Renderer renderer; 
     
-    public Engine() {
+	private static Context context;
+	
+    public Engine(Context context) {
+    	Engine.context = context;
 		// Set the background clear color to gray.
 		this.setClearColor(new float[] {0.5f, 0.5f, 0.5f, 0.5f});
 		this.renderer = new Renderer(this);
@@ -71,6 +83,10 @@ public class Engine {
     
     public Renderer getRenderer() {
 		return renderer;
+	}
+    
+    public static Context getContext() {
+		return context;
 	}
     
     public void setShaderFS(String shaderFS) {
@@ -119,6 +135,14 @@ public class Engine {
     
     public int getNormalHandle() {
 		return normalHandle;
+	}
+    
+    public int getTextureCoordinateHandle() {
+		return TextureCoordinateHandle;
+	}
+    
+    public int getTextureUniformHandle() {
+		return TextureUniformHandle;
 	}
     
     public void processLogic(Scene scene) {
@@ -207,6 +231,7 @@ public class Engine {
 			GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
 			GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
 			GLES20.glBindAttribLocation(programHandle, 2, "a_Normal");
+			GLES20.glBindAttribLocation(programHandle, 3, "a_TexCoord");
 			
 			// Link the two shaders together into a program.
 			GLES20.glLinkProgram(programHandle);
@@ -233,6 +258,7 @@ public class Engine {
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
         normalHandle = GLES20.glGetAttribLocation(programHandle, "a_Normal");
+        TextureCoordinateHandle = GLES20.glGetAttribLocation(programHandle, "a_TexCoord");
         
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);      
@@ -254,5 +280,49 @@ public class Engine {
     	return this.clearColor;
     }
     
+    public static int loadTexture(String resourceId)
+	{
+    	Log.d("android-3d", "loading: " + resourceId);
+    	//trim the file extension
+    	if(resourceId.matches(".*.(jpg|jpeg|png|gif)$"))
+    	{
+    		resourceId = resourceId.substring(0, resourceId.lastIndexOf('.'));
+    	}
+		int resID = Engine.getContext().getResources().getIdentifier(
+			resourceId, "raw", Engine.getContext().getPackageName()
+		);
+	    final int[] textureHandle = new int[1];
+	 
+	    GLES20.glGenTextures(1, textureHandle, 0);
+	 
+	    if (textureHandle[0] != 0)
+	    {
+	        final BitmapFactory.Options options = new BitmapFactory.Options();
+	        options.inScaled = false;   // No pre-scaling
+	 
+	        // Read in the resource
+	        final Bitmap bitmap = BitmapFactory.decodeResource(Engine.getContext().getResources(), resID, options);
+	 
+	        // Bind to the texture in OpenGL
+	        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+	 
+	        // Set filtering
+	        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+	        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+	 
+	        // Load the bitmap into the bound texture.
+	        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+	 
+	        // Recycle the bitmap, since its data has been loaded into OpenGL.
+	        bitmap.recycle();
+	    }
+	 
+	    if (textureHandle[0] == 0)
+	    {
+	        throw new RuntimeException("Error loading texture.");
+	    }
+	 
+	    return textureHandle[0];
+	}
     
 }

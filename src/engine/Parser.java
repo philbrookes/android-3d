@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
-import android.util.Log;
 
 public abstract class Parser {
 	private Map<String, ArrayList<Float>> vertices;
@@ -17,6 +16,7 @@ public abstract class Parser {
 	private Map<String, ArrayList<Float>> textures;
 	
 	private ArrayList<String> objIds;
+	private Map<String, ArrayList<String>> textureFiles;
 	
 	private String currObjId;
 	
@@ -30,6 +30,7 @@ public abstract class Parser {
 		this.vertices = new HashMap<String, ArrayList<Float>>();
 		this.normals = new HashMap<String, ArrayList<Float>>();
 		this.textures = new HashMap<String, ArrayList<Float>>();
+		this.textureFiles = new HashMap<String, ArrayList<String>>();
 	}
 	
 	public void parse(int resId) throws IOException {
@@ -57,6 +58,9 @@ public abstract class Parser {
 			Texts.add(texture[i]);
 		}
 	}
+	protected void addTexturefile(String textureFile) {
+		this.textureFiles.get(currObjId).add(textureFile);
+	}
 	protected void addObjId(String objId) {
 		this.currObjId = objId;		
 		this.objIds.add(objId);
@@ -64,6 +68,7 @@ public abstract class Parser {
 		this.vertices.put(currObjId, new ArrayList<Float> ());
 		this.textures.put(currObjId, new ArrayList<Float> ());
 		this.normals.put(currObjId, new ArrayList<Float> ());
+		this.textureFiles.put(currObjId, new ArrayList<String> ());
 	}
 	
 	public ArrayList<String> getObjectIds() {
@@ -91,11 +96,21 @@ public abstract class Parser {
 		return retArray;
 	}
 	public float[] getObjectTextures(String objId) {
-		Float[] texts = (Float[]) this.textures.get(objId).toArray();
-		float[] retArray = new float[texts.length];
+		ArrayList<Float> texts = this.textures.get(objId);
+		float[] retArray = new float[texts.size()];
 		int i = 0;
 		for(Float f : texts) {
-			retArray[i++] = (f != null ? f : 0);
+			retArray[i++] = (f != null ? f.floatValue() : 0);
+		}
+		return retArray;
+	}
+	
+	public String[] getObjectTextureFiles(String objId) {
+		ArrayList<String> textFiles = this.textureFiles.get(objId);
+		String[] retArray = new String[textFiles.size()];
+		int i = 0;
+		for(String s : textFiles) {
+			retArray[i++] = s;
 		}
 		return retArray;
 	}
