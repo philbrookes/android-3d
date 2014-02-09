@@ -37,7 +37,7 @@ public class ObjRenderItem extends RenderItem {
 			float[] colors = new float[verts.length];
 
 			for(int i=0; i < colors.length; i++){
-				colors[i] = 0.2f;
+				colors[i] = 0.9f;
 			}
 			FloatBuffer colBuffer;
 			colBuffer = ByteBuffer.allocateDirect(colors.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();

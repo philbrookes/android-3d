@@ -1,11 +1,12 @@
 package engine;
 
+import java.util.HashMap;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.util.Log;
 
 public class Engine {
 	private String shaderFS = 
@@ -69,7 +70,10 @@ public class Engine {
     
 	private static Context context;
 	
-    public Engine(Context context) {
+	private static HashMap<String, Integer> loadedTextures = new HashMap<String, Integer>();
+
+	
+	public Engine(Context context) {
     	Engine.context = context;
 		// Set the background clear color to gray.
 		this.setClearColor(new float[] {0.5f, 0.5f, 0.5f, 0.5f});
@@ -282,12 +286,17 @@ public class Engine {
     
     public static int loadTexture(String resourceId)
 	{
-    	Log.d("android-3d", "loading: " + resourceId);
     	//trim the file extension
     	if(resourceId.matches(".*.(jpg|jpeg|png|gif)$"))
     	{
     		resourceId = resourceId.substring(0, resourceId.lastIndexOf('.'));
     	}
+    	
+    	if(Engine.loadedTextures.get(resourceId) != null){
+    		return Engine.loadedTextures.get(resourceId);
+    	}
+    		
+    	
 		int resID = Engine.getContext().getResources().getIdentifier(
 			resourceId, "raw", Engine.getContext().getPackageName()
 		);
@@ -321,7 +330,7 @@ public class Engine {
 	    {
 	        throw new RuntimeException("Error loading texture.");
 	    }
-	 
+	    Engine.loadedTextures.put(resourceId, textureHandle[0]);
 	    return textureHandle[0];
 	}
     
