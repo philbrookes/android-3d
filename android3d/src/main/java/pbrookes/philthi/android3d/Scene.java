@@ -6,11 +6,28 @@ public class Scene {
     private ArrayList<RenderItem> items;
     private ArrayList<Light> lights;
     private Camera camera;
+    private Shader fragment, vertex;
 
     public Scene() {
         this.items = new ArrayList<RenderItem>();
         this.lights = new ArrayList<Light>();
         this.camera = new Camera();
+    }
+
+    public void setVertexShader(Shader vs) {
+        vertex = vs;
+    }
+
+    public void setFragmentShader(Shader fs) {
+        fragment = fs;
+    }
+
+    public Shader getFragment() {
+        return fragment;
+    }
+
+    public Shader getVertex() {
+        return vertex;
     }
 
     public void addItem(RenderItem item) {

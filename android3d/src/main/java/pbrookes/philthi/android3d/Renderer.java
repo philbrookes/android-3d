@@ -27,9 +27,15 @@ public class Renderer {
         initGL();
     }
 
-    public void render(Scene scene) {
+    public void reset() {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+    }
+
+    public void render(Scene scene) {
+        this.setVertexShader(scene.getVertex());
+        this.setFragmentShader(scene.getFragment());
+        this.updateProgram();
 
         this.applyCamera(scene.getCamera());
 
