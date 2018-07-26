@@ -1,13 +1,16 @@
 package pbrookes.philthi.android3d;
 
+import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
 public abstract class RenderItem {
     protected Position pos;
     protected Rotation rot;
+    protected int renderMode;
 
     public RenderItem(){
+        renderMode = GLES20.GL_TRIANGLES;
         pos = new Position();
         rot = new Rotation();
     }
@@ -30,5 +33,9 @@ public abstract class RenderItem {
 
     public int getNumVertices() {
         return 0;
+    }
+
+    public int getRenderMode() {
+        return renderMode;
     }
 }

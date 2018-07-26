@@ -11,7 +11,7 @@ import java.util.Iterator;
 import android.opengl.Matrix;
 
 public class Renderer {
-    private float[] clearColor = {1f, 1f, 1f, 1f};
+    private Color clearColor = new Color(1f, 1f, 1f, 1f);
     private int glHandle;
     private Shader fragment;
     private Shader vertex;
@@ -82,11 +82,16 @@ public class Renderer {
 
         //give the MVP matrix to GLES20
         GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mVPMatrix, 0);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, item.getNumVertices());
+        GLES20.glDrawArrays(item.getRenderMode(), 0, item.getNumVertices());
     }
 
     public void initGL() {
-        GLES20.glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+        GLES20.glClearColor(clearColor.red(), clearColor.green(), clearColor.blue(), clearColor.alpha());
+    }
+
+    public void setClearColor(Color newClear) {
+        clearColor = newClear;
+        initGL();
     }
 
     public void setBounds(int x, int y, int width, int height) {

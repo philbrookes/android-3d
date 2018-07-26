@@ -23,7 +23,6 @@ import pbrookes.philthi.android3d.*;
 public class AppRenderer implements Renderer {
     private pbrookes.philthi.android3d.Renderer renderer;
     private Scene scene;
-    private Scene blackScene;
     private Context context;
 
     public AppRenderer(Context ctx){
@@ -47,6 +46,7 @@ public class AppRenderer implements Renderer {
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         try {
             renderer = new pbrookes.philthi.android3d.Renderer();
+            renderer.setClearColor(new Color(0.6f, 0.6f, 0.6f, 1.0f));
         } catch(RuntimeException e) {
             Log.e("Android-3d", "failed to initialise renderer: " + e.getMessage());
         }
@@ -54,6 +54,7 @@ public class AppRenderer implements Renderer {
         scene = new Scene();
         scene.setVertexShader(new Shader(getRawString(R.raw.vertex), GLES20.GL_VERTEX_SHADER));
         scene.setFragmentShader(new Shader(getRawString(R.raw.fragment), GLES20.GL_FRAGMENT_SHADER));
+        scene.getCamera().getPos().setZ(5);
     }
 
     @Override
@@ -65,7 +66,6 @@ public class AppRenderer implements Renderer {
     public void onDrawFrame(GL10 glUnused) {
         renderer.reset();
         renderer.render(scene);
-        renderer.render(blackScene);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
