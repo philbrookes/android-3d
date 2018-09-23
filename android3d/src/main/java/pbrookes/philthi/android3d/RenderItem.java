@@ -2,20 +2,19 @@ package pbrookes.philthi.android3d;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.util.Log;
 
 public abstract class RenderItem {
-    protected Position pos;
+    protected Vertex3D pos;
     protected Rotation rot;
     protected int renderMode;
 
     public RenderItem(){
         renderMode = GLES20.GL_TRIANGLES;
-        pos = new Position();
+        pos = new Vertex3D();
         rot = new Rotation();
     }
 
-    public Position getPos() {
+    public Vertex3D getPos() {
         return pos;
     }
 

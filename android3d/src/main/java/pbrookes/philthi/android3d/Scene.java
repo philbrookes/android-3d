@@ -46,6 +46,10 @@ public class Scene {
         this.items.clear();
     }
 
+    public boolean hasItem(RenderItem item) {
+        return this.items.contains(item);
+    }
+
     public void addLight(Light light) {
         this.lights.add(light);
     }

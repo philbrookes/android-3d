@@ -3,7 +3,6 @@ package pbrookes.philthi.game;
 import android.content.Context;
 import android.content.res.Resources;
 import android.opengl.GLSurfaceView.Renderer;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -24,6 +23,7 @@ public class AppRenderer implements Renderer {
     private pbrookes.philthi.android3d.Renderer renderer;
     private Scene scene;
     private Context context;
+    private Cube cube;
 
     public AppRenderer(Context ctx){
         context = ctx;
@@ -55,6 +55,8 @@ public class AppRenderer implements Renderer {
         scene.setVertexShader(new Shader(getRawString(R.raw.vertex), GLES20.GL_VERTEX_SHADER));
         scene.setFragmentShader(new Shader(getRawString(R.raw.fragment), GLES20.GL_FRAGMENT_SHADER));
         scene.getCamera().getPos().setZ(5);
+        cube = new Cube();
+        scene.addItem(cube);
     }
 
     @Override

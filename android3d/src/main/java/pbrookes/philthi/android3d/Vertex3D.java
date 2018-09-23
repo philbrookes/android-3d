@@ -1,23 +1,23 @@
 package pbrookes.philthi.android3d;
 
-public class Position {
+public class Vertex3D {
     private float x, y, z;
 
-    public Position(int x, int y, int z) {
+    public Vertex3D(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Position() {
+    public Vertex3D() {
         x = y = z = 0;
     }
 
-    public Position(Position in) {
+    public Vertex3D(Vertex3D in) {
         this.clone(in);
     }
 
-    public void clone(Position in) {
+    public void clone(Vertex3D in) {
         x = in.x;
         y = in.y;
         z = in.z;

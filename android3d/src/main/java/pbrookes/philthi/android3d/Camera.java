@@ -1,26 +1,26 @@
 package pbrookes.philthi.android3d;
 
 public class Camera {
-    protected Position pos;
-    protected Position lookAt;
-    protected Position up;
+    protected Vertex3D pos;
+    protected Vertex3D lookAt;
+    protected Vertex3D up;
 
     public Camera() {
-        pos = new Position();
-        lookAt = new Position();
-        up = new Position();
+        pos = new Vertex3D();
+        lookAt = new Vertex3D();
+        up = new Vertex3D();
         up.setY(1.0f);
     }
 
-    public Position getPos() {
+    public Vertex3D getPos() {
         return pos;
     }
 
-    public Position getLookAt() {
+    public Vertex3D getLookAt() {
         return lookAt;
     }
 
-    public Position getUp() {
+    public Vertex3D getUp() {
         return up;
     }
 }
