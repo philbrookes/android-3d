@@ -40,6 +40,10 @@ public class Vertex2D {
         return new float[]{x, y};
     }
 
+    public boolean equals(Vertex2D in) {
+        return (in.getX() == x && in.getY() == y);
+    }
+
     public String toString() {
         return "(x: " + x + ", y: " + y + ")";
     }

@@ -22,11 +22,11 @@ public class Scene {
         fragment = fs;
     }
 
-    public Shader getFragment() {
+    public Shader getFragmentShader() {
         return fragment;
     }
 
-    public Shader getVertex() {
+    public Shader getVertexShader() {
         return vertex;
     }
 

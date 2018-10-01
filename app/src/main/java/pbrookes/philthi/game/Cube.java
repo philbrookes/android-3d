@@ -112,12 +112,8 @@ public class Cube extends RenderItem {
             int zIndex = (i*3) + 2;
             float zVal = vertices[zIndex];
             if(zVal == 1.0f){
-                Log.d("android-3d", "adding front color");
-                //front face
                 colorsBuffer.put(frontColor.toArray());
             } else {
-                Log.d("android-3d", "adding back color");
-                //back face
                 colorsBuffer.put(backColor.toArray());
             }
         }

@@ -11,6 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 
 import java.io.InputStream;
+import java.util.Date;
 
 import pbrookes.philthi.android3d.*;
 
@@ -22,8 +23,12 @@ import pbrookes.philthi.android3d.*;
 public class AppRenderer implements Renderer {
     private pbrookes.philthi.android3d.Renderer renderer;
     private Scene scene;
+    private HUD hud;
     private Context context;
     private Cube cube;
+    private Cube cube2;
+    private HUDTextItem item;
+    private HUDTextItem item2;
 
     public AppRenderer(Context ctx){
         context = ctx;
@@ -56,18 +61,33 @@ public class AppRenderer implements Renderer {
         scene.setFragmentShader(new Shader(getRawString(R.raw.fragment), GLES20.GL_FRAGMENT_SHADER));
         scene.getCamera().getPos().setZ(5);
         cube = new Cube();
+        cube.getPos().clone(new Vertex3D(0, 2, 0));
         scene.addItem(cube);
+        cube2 = new Cube();
+        cube2.getPos().clone(new Vertex3D(0, -2, 0));
+        scene.addItem(cube2);
+        hud = new HUD();
+        hud.setVertexShader(new Shader(getRawString(R.raw.default_texture_vertex_shader), GLES20.GL_VERTEX_SHADER));
+        hud.setFragmentShader(new Shader(getRawString(R.raw.default_texture_fragment_shader), GLES20.GL_FRAGMENT_SHADER));
+        item = new HUDTextItem(new Vertex2D(0, 20));
+        item2 = new HUDTextItem(new Vertex2D(0, 40));
+        hud.addItem(item);
+        hud.addItem(item2);
     }
 
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+        hud.setAspectRatio(new Float(width / height));
         renderer.setBounds(0, 0, width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
+        item.setText("timestamp: " +Long.toString(new Date().getTime()));
+        item2.setText("timestamp 2: " +Long.toString(new Date().getTime()));
         renderer.reset();
         renderer.render(scene);
+        renderer.renderOrthof(hud);
     }
 
     public boolean onTouchEvent(MotionEvent event) {

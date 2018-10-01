@@ -1,10 +1,11 @@
 package pbrookes.philthi.game;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import pbrookes.philthi.android3d.Engine;
 
-public class App extends AppCompatActivity {
+public class App extends Activity {
 
     private AppView appView;
 

@@ -55,6 +55,10 @@ public class Vertex3D {
         return new float[]{x, y, z};
     }
 
+    public boolean equals(Vertex3D in) {
+        return (in.getX() == x && in.getY() == y && in.getZ() == z);
+    }
+
     public String toString() {
         return "(x: " + x + ", y: " + y + ", z: " + z + ")";
     }

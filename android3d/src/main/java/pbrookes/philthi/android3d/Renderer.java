@@ -1,13 +1,7 @@
 package pbrookes.philthi.android3d;
 
-import android.content.Context;
 import android.opengl.GLES20;
-import android.util.Log;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.util.Iterator;
 import android.opengl.Matrix;
 
 public class Renderer {
@@ -33,8 +27,8 @@ public class Renderer {
     }
 
     public void render(Scene scene) {
-        this.setVertexShader(scene.getVertex());
-        this.setFragmentShader(scene.getFragment());
+        this.setVertexShader(scene.getVertexShader());
+        this.setFragmentShader(scene.getFragmentShader());
         this.updateProgram();
 
         this.applyCamera(scene.getCamera());
@@ -46,6 +40,37 @@ public class Renderer {
         for(RenderItem item : scene.getItems()) {
             this.applyItem(item);
         }
+    }
+
+    public void renderOrthof(HUD hud) {
+        this.setVertexShader(hud.getVertexShader());
+        this.setFragmentShader(hud.getFragmentShader());
+        this.updateProgram();
+
+        int maPositionHandle = GLES20.glGetAttribLocation(glHandle, "aPosition");
+        int maTextureHandle = GLES20.glGetAttribLocation(glHandle, "aTextureCoord");
+        int muMVPMatrixHandle = GLES20.glGetUniformLocation(glHandle, "uMVPMatrix");
+
+        // Setup orthogonal mode
+        float[] mProjMatrix = new float[16];
+        Matrix.orthoM(mProjMatrix, 0, 0, 1, 0, 1, -64.0f, 64.0f);
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mProjMatrix, 0);
+
+        // Change depth func so our HUD is always rendered atop
+        GLES20.glDepthFunc(GLES20.GL_ALWAYS);
+        // Disable depth writes
+        GLES20.glDepthMask(false);
+
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glEnable(GLES20.GL_BLEND);
+
+        // Render fullscreen quad
+        for(HUDTextItem item: hud.getItems()){
+            item.render(this, maPositionHandle, maTextureHandle);
+        }
+        // Restore depth func an depth write
+        GLES20.glDepthFunc(GLES20.GL_LEQUAL);
+        GLES20.glDepthMask(true);
     }
 
     private void applyCamera(Camera cam) {
