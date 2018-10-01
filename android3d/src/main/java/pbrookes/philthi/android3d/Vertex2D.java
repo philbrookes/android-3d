@@ -3,7 +3,7 @@ package pbrookes.philthi.android3d;
 public class Vertex2D {
     private float x, y;
 
-    public Vertex2D(int x, int y) {
+    public Vertex2D(float x, float y) {
         this.x = x;
         this.y = y;
     }

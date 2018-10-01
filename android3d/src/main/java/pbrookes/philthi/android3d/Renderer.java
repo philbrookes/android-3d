@@ -9,6 +9,7 @@ public class Renderer {
     private int glHandle;
     private Shader fragment;
     private Shader vertex;
+    private float ratio;
 
     public int MVPMatrixHandle = -1, positionHandle = -1, colorHandle = -1;
 
@@ -51,11 +52,6 @@ public class Renderer {
         int maTextureHandle = GLES20.glGetAttribLocation(glHandle, "aTextureCoord");
         int muMVPMatrixHandle = GLES20.glGetUniformLocation(glHandle, "uMVPMatrix");
 
-        // Setup orthogonal mode
-        float[] mProjMatrix = new float[16];
-        Matrix.orthoM(mProjMatrix, 0, 0, 1, 0, 1, -64.0f, 64.0f);
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mProjMatrix, 0);
-
         // Change depth func so our HUD is always rendered atop
         GLES20.glDepthFunc(GLES20.GL_ALWAYS);
         // Disable depth writes
@@ -63,10 +59,17 @@ public class Renderer {
 
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         GLES20.glEnable(GLES20.GL_BLEND);
+        float[] mProjMatrix = new float[16];
 
-        // Render fullscreen quad
-        for(HUDTextItem item: hud.getItems()){
-            item.render(this, maPositionHandle, maTextureHandle);
+        for(HUDRenderable item: hud.getItems()){
+            Matrix.orthoM(mProjMatrix, 0, 0, 1*ratio, 0, 1, -64.0f, 64.0f);
+            Matrix.setIdentityM(modelMatrix, 0);
+            item.render(this, maPositionHandle, maTextureHandle, modelMatrix);
+
+            Matrix.multiplyMM(mProjMatrix, 0, mProjMatrix, 0, modelMatrix, 0);
+
+            GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mProjMatrix, 0);
+            GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, item.getVertexBuffer().capacity() / 3);
         }
         // Restore depth func an depth write
         GLES20.glDepthFunc(GLES20.GL_LEQUAL);
@@ -122,7 +125,7 @@ public class Renderer {
     public void setBounds(int x, int y, int width, int height) {
         GLES20.glViewport(x, y, width, height);
 
-        final float ratio = (float) width / height;
+        ratio = (float) width / height;
         final float left = -ratio;
         final float right = ratio;
         final float bottom = -1.0f;
@@ -168,7 +171,8 @@ public class Renderer {
         }
 
         if (glHandle == 0) {
-            throw new RuntimeException("Error updating program.");
+            int err = GLES20.glGetError();
+            throw new RuntimeException("Error (" + err + ") updating program.");
         }
 
         // Set program handles. These will later be used to pass in values to the program.

@@ -2,6 +2,8 @@ package pbrookes.philthi.game;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -27,8 +29,7 @@ public class AppRenderer implements Renderer {
     private Context context;
     private Cube cube;
     private Cube cube2;
-    private HUDTextItem item;
-    private HUDTextItem item2;
+    private HUDItem item;
 
     public AppRenderer(Context ctx){
         context = ctx;
@@ -66,13 +67,16 @@ public class AppRenderer implements Renderer {
         cube2 = new Cube();
         cube2.getPos().clone(new Vertex3D(0, -2, 0));
         scene.addItem(cube2);
+
         hud = new HUD();
         hud.setVertexShader(new Shader(getRawString(R.raw.default_texture_vertex_shader), GLES20.GL_VERTEX_SHADER));
         hud.setFragmentShader(new Shader(getRawString(R.raw.default_texture_fragment_shader), GLES20.GL_FRAGMENT_SHADER));
-        item = new HUDTextItem(new Vertex2D(0, 20));
-        item2 = new HUDTextItem(new Vertex2D(0, 40));
+
+        Bitmap arrow = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrow);
+        item = new HUDItem(new Vertex2D(3f, 1f), arrow);
+        item.setScale(new Vertex2D(0.1f, 0.1f));
         hud.addItem(item);
-        hud.addItem(item2);
+
     }
 
     @Override
@@ -83,8 +87,7 @@ public class AppRenderer implements Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        item.setText("timestamp: " +Long.toString(new Date().getTime()));
-        item2.setText("timestamp 2: " +Long.toString(new Date().getTime()));
+        item.setRotation((item.getRotation() + 1) % 360);
         renderer.reset();
         renderer.render(scene);
         renderer.renderOrthof(hud);
