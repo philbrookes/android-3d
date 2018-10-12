@@ -30,6 +30,7 @@ public class AppRenderer implements Renderer {
     private Cube cube;
     private Cube cube2;
     private HUDItem item;
+    private HUDItem item2;
 
     public AppRenderer(Context ctx){
         context = ctx;
@@ -76,6 +77,9 @@ public class AppRenderer implements Renderer {
         item = new HUDItem(new Vertex2D(500, 500), arrow);
         item.setScale(new Vertex2D(0.1f, 0.1f));
         hud.addItem(item);
+        item2 = new HUDItem(new Vertex2D(750, 500), arrow);
+        item2.setScale(new Vertex2D(0.1f, 0.1f));
+        hud.addItem(item2);
 
     }
 
