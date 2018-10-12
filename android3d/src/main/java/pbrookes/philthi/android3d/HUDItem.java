@@ -18,21 +18,31 @@ public class HUDItem implements HUDRenderable {
     protected float rotation = 100.0f;
     protected Bitmap bitmap;
     protected Vertex2D scale = new Vertex2D(1, 1);
+    protected int width, height;
+    private int direction = 1;
 
     public HUDItem(Vertex2D pos, Bitmap bmap){
         this(pos);
         this.setBitmap(bmap);
+        this.generateVertexBuffer();
+    }
+
+    protected void generateVertexBuffer(){
+        // Generate buffers for vertices and texture coordinates
+        float mVertices[]  = {
+                -(height/2),-(width/2),0, //top-left
+                (height/2),-(width/2),0, //top-right
+                -(height/2),(width/2),0, //bottom-left
+                (height/2),(width/2),0 //bottom-right
+        };
+        vertexBuffer = ByteBuffer.allocateDirect(mVertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        vertexBuffer.put(mVertices).position(0);
     }
 
     public HUDItem(Vertex2D pos){
         this.position = pos;
         texture = new int[1];
-
-        // Generate buffers for vertices and texture coordinates
-        float mVertices[]  = {-0.5f,-0.5f,0, 0.5f,-0.5f,0, -0.5f,0.5f,0, 0.5f,0.5f,0};
         float mTexCoords[] = {0,1, 1,1, 0,0, 1,0};
-        vertexBuffer = ByteBuffer.allocateDirect(mVertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        vertexBuffer.put(mVertices).position(0);
         texCoordBuffer = ByteBuffer.allocateDirect(mTexCoords.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         texCoordBuffer.put(mTexCoords).position(0);
 
@@ -44,14 +54,41 @@ public class HUDItem implements HUDRenderable {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
     }
 
+    public void onTouch(){
+        direction = -direction;
+    }
+
+    public boolean isTouched(Vertex2D point){
+        Vertex2D topLeft = new Vertex2D(
+            position.getX() - ((width/2) * scale.getX()),
+            position.getY() - ((height/2) * scale.getY())
+        );
+
+        Vertex2D bottomRight = new Vertex2D(
+                position.getX() + ((width/2) * scale.getX()),
+                position.getY() + ((height/2) * scale.getY())
+        );
+
+        //TODO: deal with rotating rectangles
+        if(topLeft.getY() <= point.getY() && point.getY() <= bottomRight.getY() &&
+            topLeft.getX() <= point.getX() && point.getX() <= bottomRight.getX()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void processLogic() {
+        setRotation((getRotation() + direction) % 360);
+    }
+
     public void render(Renderer renderer, int maPositionHandle, int maTextureHandle, float[] modelMatrix){
         if(bitmap == null){
             Log.d("android-3d", "bitmap is null");
             return;
         }
         //apply matrix multiplications
-        Matrix.scaleM(modelMatrix, 0, this.scale.getX(), this.scale.getY(), 0);
         Matrix.translateM(modelMatrix, 0, position.getX(), position.getY(), 0);
+        Matrix.scaleM(modelMatrix, 0, this.scale.getX(), this.scale.getY(), 0);
         Matrix.rotateM(modelMatrix, 0, this.rotation, 0.0f, 0.0f, 1.0f);
 
         //feed data to opengl
@@ -112,6 +149,9 @@ public class HUDItem implements HUDRenderable {
     public void setBitmap(Bitmap bmap){
         bitmap = bmap;
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        this.height = bmap.getHeight();
+        this.width = bmap.getWidth();
+        this.generateVertexBuffer();
     }
 
     public Bitmap getBitmap() {

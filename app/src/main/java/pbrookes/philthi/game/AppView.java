@@ -15,6 +15,18 @@ public class AppView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+
+        if (event != null)
+        {
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                if (renderer != null)
+                {
+                    renderer.onTouchEvent(event);
+                }
+            }
+        }
+
         return super.onTouchEvent(event);
     }
 

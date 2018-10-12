@@ -97,7 +97,6 @@ public class Cube extends RenderItem {
 
     private FloatBuffer verticesBuffer, colorsBuffer;
 
-
     public Cube() {
         super();
 

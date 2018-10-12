@@ -60,7 +60,7 @@ public class AppRenderer implements Renderer {
         scene = new Scene();
         scene.setVertexShader(new Shader(getRawString(R.raw.vertex), GLES20.GL_VERTEX_SHADER));
         scene.setFragmentShader(new Shader(getRawString(R.raw.fragment), GLES20.GL_FRAGMENT_SHADER));
-        scene.getCamera().getPos().setZ(5);
+        scene.getCamera().getPos().setZ(6);
         cube = new Cube();
         cube.getPos().clone(new Vertex3D(0, 2, 0));
         scene.addItem(cube);
@@ -73,7 +73,7 @@ public class AppRenderer implements Renderer {
         hud.setFragmentShader(new Shader(getRawString(R.raw.default_texture_fragment_shader), GLES20.GL_FRAGMENT_SHADER));
 
         Bitmap arrow = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrow);
-        item = new HUDItem(new Vertex2D(3f, 1f), arrow);
+        item = new HUDItem(new Vertex2D(500, 500), arrow);
         item.setScale(new Vertex2D(0.1f, 0.1f));
         hud.addItem(item);
 
@@ -81,19 +81,19 @@ public class AppRenderer implements Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-        hud.setAspectRatio(new Float(width / height));
+        hud.setBounds(0, 0, width, height);
         renderer.setBounds(0, 0, width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        item.setRotation((item.getRotation() + 1) % 360);
+        scene.getCamera().rotate(0.01f);
         renderer.reset();
         renderer.render(scene);
         renderer.renderOrthof(hud);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        return true;
+        return hud.onTouchEvent(event);
     }
 }

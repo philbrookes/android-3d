@@ -10,6 +10,7 @@ public class Renderer {
     private Shader fragment;
     private Shader vertex;
     private float ratio;
+    private int viewWidth, viewHeight;
 
     public int MVPMatrixHandle = -1, positionHandle = -1, colorHandle = -1;
 
@@ -62,8 +63,9 @@ public class Renderer {
         float[] mProjMatrix = new float[16];
 
         for(HUDRenderable item: hud.getItems()){
-            Matrix.orthoM(mProjMatrix, 0, 0, 1*ratio, 0, 1, -64.0f, 64.0f);
+            Matrix.orthoM(mProjMatrix, 0, 0, this.viewWidth, 0, this.viewHeight, -64.0f, 64.0f);
             Matrix.setIdentityM(modelMatrix, 0);
+            item.processLogic();
             item.render(this, maPositionHandle, maTextureHandle, modelMatrix);
 
             Matrix.multiplyMM(mProjMatrix, 0, mProjMatrix, 0, modelMatrix, 0);
@@ -124,6 +126,8 @@ public class Renderer {
 
     public void setBounds(int x, int y, int width, int height) {
         GLES20.glViewport(x, y, width, height);
+        this.viewHeight = height;
+        this.viewWidth = width;
 
         ratio = (float) width / height;
         final float left = -ratio;
@@ -131,7 +135,7 @@ public class Renderer {
         final float bottom = -1.0f;
         final float top = 1.0f;
         final float near = 1.0f;
-        final float far = 10.0f;
+        final float far = 1000.0f;
 
         Matrix.frustumM(projectionMatrix, 0, left, right, bottom, top, near, far);
     }

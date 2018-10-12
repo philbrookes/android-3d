@@ -10,4 +10,7 @@ public interface HUDRenderable {
     public float getRotation();
     public void setRotation(float rot);
     public FloatBuffer getVertexBuffer();
+    public boolean isTouched(Vertex2D point);
+    public void onTouch();
+    public void processLogic();
 }
