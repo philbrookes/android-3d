@@ -3,6 +3,7 @@ package pbrookes.philthi.game;
 import android.opengl.GLES20;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -46,12 +47,15 @@ public class Triangle extends RenderItem {
         colorsBuffer.put(colors).position(0);
     }
 
-    public void processLogic() {
+    public void processLogic(float timePassed) {
         long time = SystemClock.uptimeMillis() % 10000L;
         float angle = (360.0f / 10000.0f) * ((int) time);
         this.rot.setYaw(angle);
         this.rot.setRoll(angle*2);
     }
+    public void onTouch(MotionEvent event){
+        Log.d("ANDROID-3D", "Triangle touched!");
+    };
 
     @Override
     public void render(Renderer renderer, float[] modelMatrix) {

@@ -91,13 +91,16 @@ public class AppRenderer implements Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        scene.getCamera().rotate(0.01f);
+//        scene.getCamera().rotate(0.01f);
         renderer.reset();
         renderer.render(scene);
         renderer.renderOrthof(hud);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        return hud.onTouchEvent(event);
+        if(hud.onTouchEvent(event)) {
+            return true;
+        }
+        return renderer.onTouchEvent(event, scene, false);
     }
 }

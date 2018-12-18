@@ -3,6 +3,7 @@ package pbrookes.philthi.game;
 import android.opengl.GLES20;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -97,6 +98,8 @@ public class Cube extends RenderItem {
 
     private FloatBuffer verticesBuffer, colorsBuffer;
 
+    private boolean spin = false;
+
     public Cube() {
         super();
 
@@ -119,12 +122,17 @@ public class Cube extends RenderItem {
         colorsBuffer.position(0);
     }
 
-    public void processLogic() {
-        long time = SystemClock.uptimeMillis() % 10000L;
-        float angle = (360.0f / 10000.0f) * ((int) time);
-        this.rot.setYaw(angle);
-        this.rot.setRoll(angle*2);
+    public void processLogic(float timePassed) {
+        if(!spin){
+            return;
+        }
+        float angle = 0.0360f * timePassed;
+        rot.setYaw(rot.getYaw() + angle);
+        rot.setRoll(rot.getRoll() + angle*2);
     }
+    public void onTouch(MotionEvent event){
+        spin = !spin;
+    };
 
     @Override
     public void render(Renderer renderer, float[] modelMatrix) {

@@ -8,6 +8,15 @@ public class Vertex2D {
         this.y = y;
     }
 
+    public Vertex2D(float[] floats){
+        float[] newFloats = {0,0};
+        for(int i=0; i<=floats.length && i<2;i++){
+            newFloats[i] = floats[i];
+        }
+        x = newFloats[0];
+        y = newFloats[1];
+    }
+
     public Vertex2D() {
         x = y = 0;
     }
@@ -19,6 +28,16 @@ public class Vertex2D {
     public void clone(Vertex2D in) {
         x = in.x;
         y = in.y;
+    }
+
+    public Vertex2D normal(){
+        float mag = (float)Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+        return new Vertex2D(x / mag, y / mag);
+    }
+
+    public void normalise() {
+        Vertex2D newVal = normal();
+        this.clone(newVal);
     }
 
     public void setX(float newX) {
@@ -38,6 +57,11 @@ public class Vertex2D {
     }
     public float[] getXY() {
         return new float[]{x, y};
+    }
+
+    public void add(Vertex2D in) {
+        x += in.x;
+        y += in.y;
     }
 
     public boolean equals(Vertex2D in) {

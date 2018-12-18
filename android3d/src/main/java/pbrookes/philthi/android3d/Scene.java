@@ -1,5 +1,7 @@
 package pbrookes.philthi.android3d;
 
+import android.view.MotionEvent;
+
 import java.util.ArrayList;
 
 public class Scene {

@@ -2,6 +2,8 @@ package pbrookes.philthi.android3d;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
+import android.view.MotionEvent;
 
 public abstract class RenderItem {
     protected Vertex3D pos;
@@ -18,7 +20,13 @@ public abstract class RenderItem {
         return pos;
     }
 
-    public abstract void processLogic();
+    public abstract void processLogic(float timePassed);
+
+    public abstract void onTouch(MotionEvent event);
+
+    public boolean intersects(Vertex3D point) {
+        return pos.distance(point) <= 1;
+    }
 
     public void render(Renderer renderer, float[] modelMatrix) {
         float[] pos = this.pos.getXYZ();

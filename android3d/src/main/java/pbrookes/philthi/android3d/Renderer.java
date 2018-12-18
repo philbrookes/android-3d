@@ -3,6 +3,10 @@ package pbrookes.philthi.android3d;
 import android.opengl.GLES20;
 
 import android.opengl.Matrix;
+import android.os.SystemClock;
+import android.renderscript.Matrix4f;
+import android.util.Log;
+import android.view.MotionEvent;
 
 public class Renderer {
     private Color clearColor = new Color(1f, 1f, 1f, 1f);
@@ -19,6 +23,8 @@ public class Renderer {
 	private float[] viewMatrix = new float[16];
     private float[] mVPMatrix = new float[16];
 
+    private float lastRender = 0;
+
     public Renderer() {
         initGL();
     }
@@ -29,6 +35,10 @@ public class Renderer {
     }
 
     public void render(Scene scene) {
+        float timePassed = 0;
+        if(lastRender != 0){
+            timePassed = SystemClock.uptimeMillis() - lastRender;
+        }
         this.setVertexShader(scene.getVertexShader());
         this.setFragmentShader(scene.getFragmentShader());
         this.updateProgram();
@@ -40,8 +50,9 @@ public class Renderer {
         }
 
         for(RenderItem item : scene.getItems()) {
-            this.applyItem(item);
+            this.applyItem(item, timePassed);
         }
+        lastRender = SystemClock.uptimeMillis();
     }
 
     public void renderOrthof(HUD hud) {
@@ -96,9 +107,9 @@ public class Renderer {
 
     }
 
-    private void applyItem(RenderItem item) {
+    private void applyItem(RenderItem item, float timePassed) {
         //let the item run any code it needs to
-        item.processLogic();
+        item.processLogic(timePassed);
 
         //reset the model matrix
         Matrix.setIdentityM(modelMatrix, 0);
@@ -191,4 +202,46 @@ public class Renderer {
         GLES20.glUseProgram(glHandle);
     }
 
+    public boolean onTouchEvent(MotionEvent event, Scene scene, boolean penetrate) {
+        boolean touched = false;
+        Vertex2D normalizedPoint = new Vertex2D(
+            (2f * event.getX() / viewWidth) - 1,
+            0 - ((2f * event.getY() / viewHeight) - 1f)
+        );
+
+        Vertex4D clipCoords = new Vertex4D(normalizedPoint.getX(), normalizedPoint.getY(), -1f, 1f);
+        float[] eyeCoords = new float[4];
+
+        float[] invertedProjectionMatrix = new float[16];
+        Matrix.invertM (invertedProjectionMatrix, 0, projectionMatrix, 0);
+        Matrix.multiplyMV(eyeCoords, 0, invertedProjectionMatrix, 0, clipCoords.getXYZA(), 0);
+        eyeCoords[2] = -1f;
+        eyeCoords[3] = 0f;
+
+
+        float[] rayCoords = new float[4];
+        float[] invertedWorldMatrix = new float[16];
+        Matrix.invertM (invertedWorldMatrix, 0, viewMatrix, 0);
+        Matrix.multiplyMV(rayCoords, 0, invertedWorldMatrix, 0, eyeCoords, 0);
+
+        Vertex3D worldRay = new Vertex3D(rayCoords);
+        worldRay.normalise();
+
+        Vertex3D ray = new Vertex3D(scene.getCamera().getPos());
+        for(int i=0;i<500;i++){
+            ray.add(worldRay);
+            for(RenderItem item : scene.getItems()) {
+                if(item.intersects(ray)){
+                    touched = true;
+                    item.onTouch(event);
+                    if(!penetrate){
+                        return true;
+                    }
+                }
+            }
+        }
+
+
+        return touched;
+    }
 }
