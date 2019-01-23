@@ -32,6 +32,8 @@ public class AppRenderer implements Renderer {
     private HUDItem item;
     private HUDItem item2;
 
+    private boolean penetrate = false;
+
     public AppRenderer(Context ctx){
         context = ctx;
     }
@@ -98,9 +100,17 @@ public class AppRenderer implements Renderer {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
+        boolean touched = false;
         if(hud.onTouchEvent(event)) {
+            touched = true;
+            if(!penetrate) {
+                return touched;
+            }
+        }
+        if(renderer.onTouchEvent(event, scene, penetrate)) {
             return true;
         }
-        return renderer.onTouchEvent(event, scene, false);
+
+        return touched;
     }
 }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Game</string>
+
+    <string name="title_activity_main_menu">Color Slide</string>
+    <string name="new_game">New Game</string>
+    <string name="continue_game">Continue</string>
+    <string name="hi_score">Hi-Score</string>
 </resources>
