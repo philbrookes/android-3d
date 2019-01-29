@@ -4,6 +4,7 @@
       <w>bmap</w>
       <w>coords</w>
       <w>gles</w>
+      <w>huds</w>
       <w>renderers</w>
       <w>shaders</w>
     </words>

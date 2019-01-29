@@ -56,6 +56,10 @@ public class Vertex3D {
         z = newZ;
     }
 
+    public void setXY(float newX, float newY) { x = newX; y = newY; }
+
+    public void setXYZ(float newX, float newY, float newZ) { x = newX; y = newY; z = newZ; }
+
     public float getX() {
         return x;
     }

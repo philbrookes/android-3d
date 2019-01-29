@@ -20,6 +20,10 @@ public abstract class RenderItem {
         return pos;
     }
 
+    public Rotation getRotation() {
+        return rot;
+    }
+
     public abstract void processLogic(float timePassed);
 
     public abstract void onTouch(MotionEvent event);

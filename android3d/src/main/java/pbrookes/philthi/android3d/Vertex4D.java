@@ -62,6 +62,12 @@ public class Vertex4D {
         a = newA;
     }
 
+    public void setXY(float newX, float newY) { x = newX; y = newY; }
+
+    public void setXYZ(float newX, float newY, float newZ) { x = newX; y = newY; z = newZ; }
+
+    public void setXYZA(float newX, float newY, float newZ, float newA) { x = newX; y = newY; z = newZ; a = newA; }
+
     public float getX() {
         return x;
     }

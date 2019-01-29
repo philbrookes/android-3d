@@ -9,6 +9,7 @@ public class Scene {
     private ArrayList<Light> lights;
     private Camera camera;
     private Shader fragment, vertex;
+    private String name;
 
     public Scene() {
         this.items = new ArrayList<RenderItem>();

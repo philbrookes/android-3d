@@ -9,10 +9,10 @@
         android:roundIcon="@drawable/arrow"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        <activity android:name=".App">
+        <activity android:name=".LevelActivity">
         </activity>
         <activity
-            android:name=".MainMenu"
+            android:name=".MainMenuActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main_menu"
             android:theme="@style/FullscreenTheme">

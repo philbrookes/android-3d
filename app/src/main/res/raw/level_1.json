@@ -1,0 +1,102 @@
+{
+  "name": "Level 1",
+  "clear_color": {
+    "r": 0.8,
+    "g": 0.8,
+    "b": 0.8,
+    "a": 1.0
+  },
+  "scenes": [
+    {
+      "name": "game_scene",
+      "camera": {
+        "up": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0
+        },
+        "look_at": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 6.0
+        }
+      },
+      "shaders": {
+        "vertex": "default",
+        "fragment": "default"
+      },
+      "objects": [
+        {
+          "name": "cube_1",
+          "type": "cube",
+          "position": {
+            "x": -2,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "yaw": 0.0,
+            "pitch": 0.0,
+            "roll": 0.0
+          },
+          "on_touch": "wobble"
+        },
+        {
+          "name": "triangle_1",
+          "type": "triangle",
+          "position": {
+            "x": 2,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "yaw": 12.0,
+            "pitch": 12.0,
+            "roll": 12.0
+          },
+          "on_touch": "bounce"
+        }
+      ]
+    }
+  ],
+  "huds": [
+    {
+      "name": "hud",
+      "shaders": {
+        "vertex": "default_texture",
+        "fragment": "default_texture"
+      },
+      "objects": [
+        {
+          "name": "left_arrow",
+          "position": {
+            "x": 150,
+            "y": 150
+          },
+          "scale": {
+            "x": 0.1,
+            "y": 0.1
+          },
+          "texture": "arrow"
+        },
+        {
+          "name": "eight_arrow",
+          "position": {
+            "x": 450,
+            "y": 150
+          },
+          "scale": {
+            "x": 0.1,
+            "y": 0.1
+          },
+          "texture": "arrow"
+        }
+      ]
+    }
+  ]
+}

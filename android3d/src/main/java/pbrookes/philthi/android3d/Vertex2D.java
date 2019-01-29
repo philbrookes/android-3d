@@ -48,6 +48,8 @@ public class Vertex2D {
         y = newY;
     }
 
+    public void setXY(float newX, float newY) { x = newX; y = newY; }
+
     public float getX() {
         return x;
     }
@@ -55,6 +57,7 @@ public class Vertex2D {
     public float getY() {
         return y;
     }
+
     public float[] getXY() {
         return new float[]{x, y};
     }

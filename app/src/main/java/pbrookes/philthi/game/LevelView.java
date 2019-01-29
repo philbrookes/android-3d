@@ -4,10 +4,10 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
-public class AppView extends GLSurfaceView {
-    private AppRenderer renderer;
+public class LevelView extends GLSurfaceView {
+    private LevelRenderer renderer;
 
-    public AppView(Context context)
+    public LevelView(Context context)
     {
         super(context);
     }
@@ -31,7 +31,7 @@ public class AppView extends GLSurfaceView {
     }
 
     // Hides superclass method.
-    public void setRenderer(AppRenderer renderer)
+    public void setRenderer(LevelRenderer renderer)
     {
         this.renderer = renderer;
         super.setRenderer(renderer);
